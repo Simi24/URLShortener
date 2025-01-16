@@ -1,7 +1,7 @@
 import { ThemeProvider } from "./components/providers/theme-provider"
 import URLShortener from "./components/URLShortener"
 import { ModeToggle } from "./components/mode-toggle"
-
+//TODO: create TextProvider for use static text
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

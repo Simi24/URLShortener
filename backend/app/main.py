@@ -15,6 +15,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# TODO: try handling the potential errors that might occur when connecting to the database
+# TODO: try handling the potential errors due to wrong data given by the user, for instance no data given or wrong data type
+
 
 @app.on_event("startup")
 async def startup_db_client():

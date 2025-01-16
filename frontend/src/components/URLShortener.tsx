@@ -4,8 +4,6 @@ import { URLShortenerForm } from './URLShortenerForm';
 import { URLResult } from './URLResult';
 import { TabSelector } from './URLTabSelector';
 import { ShortenedData, RetrievedData } from '@/util/types/URLData';
-import { ModeToggle } from './mode-toggle';
-import { useTheme } from './providers/theme-provider';
 
 
 const URLShortener: React.FC = () => {
@@ -16,14 +14,14 @@ const URLShortener: React.FC = () => {
   const [retrievedData, setRetrievedData] = useState<RetrievedData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
-  const { loading, error, shortenUrl, retrieveUrl } = useNetworkRequest();
-  const { theme } = useTheme();
+  const { loading, shortenUrl, retrieveUrl } = useNetworkRequest();
 
   const BASE_URL = 'http://shorturl.com/';
 
   const handleShortenSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setRetrievedData(null);
     try {
       const result = await shortenUrl(url);
       if (result !== undefined) {
@@ -40,15 +38,16 @@ const URLShortener: React.FC = () => {
   const extractShortCode = (input: string): string => {
     try {
       const url = new URL(input);
-      return url.pathname.slice(1); // Remove leading slash
+      return url.pathname.slice(1);
     } catch {
-      return input; // If input is not a valid URL, return it as is
+      return input;
     }
   };
 
   const handleRetrieveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setRetrievedData(null);
     try {
       const code = extractShortCode(shortCode);
       const result = await retrieveUrl(code);

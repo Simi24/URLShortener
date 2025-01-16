@@ -1,29 +1,20 @@
 import { useState } from 'react';
 import CommunicationController from '../model/CommunicationController';
-import { ShortenedData, RetrievedData } from '../util/types/URLData';
 
 const useNetworkRequest = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const communicationController = CommunicationController.getInstance();
 
     const shortenUrl = async (url: string) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch('/api/shorten', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
-            });
-
-            if (!response.ok) {
-                throw new Error('Something went wrong. Please try again later.');
-            }
-
-            const data = await response.json();
+            const data = await communicationController.shortenUrl(url);
             return data;
         } catch (err) {
-            throw new Error('Unable to shorten URL. Please try again later.');
+            setError(err instanceof Error ? err : new Error('Unable to shorten URL. Please try again later.'));
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -33,20 +24,11 @@ const useNetworkRequest = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`/api/retrieve/${code}`);
-            
-            if (!response.ok) {
-                throw new Error(
-                    response.status === 404 
-                        ? 'URL not found. Please check the code and try again.'
-                        : 'Something went wrong. Please try again later.'
-                );
-            }
-
-            const data = await response.json();
+            const data = await communicationController.retriveUrl(code);
             return data;
         } catch (err) {
-            throw new Error('Unable to retrieve URL. Please try again later.');
+            setError(err instanceof Error ? err : new Error('Unable to retrieve URL. Please try again later.'));
+            throw err;
         } finally {
             setLoading(false);
         }
