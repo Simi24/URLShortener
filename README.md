@@ -23,6 +23,7 @@ A modern, full-stack URL shortener application built with FastAPI, React, and Mo
 - Nginx (load balancer)
 
 ### Frontend
+- Vite
 - React
 - TypeScript -> choosen for type safety
 - Tailwind CSS
