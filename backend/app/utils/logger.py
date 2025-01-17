@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from enum import Enum
 import sys
@@ -37,7 +37,7 @@ class Logger:
         log_dir = Path(getenv("LOG_PATH", "/app/logs"))
         log_dir.mkdir(exist_ok=True)
 
-        timestamp = datetime.now().strftime("%Y%m%d")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d")
         self.log_file = log_dir / f"url_shortener_{timestamp}.log"
         print(f"Log file path: {self.log_file.absolute()}")
 
@@ -45,7 +45,7 @@ class Logger:
         while self.running:
             try:
                 level, message = await self.queue.get()
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
                 log_message = f"[{timestamp}] {level.name}: {message}"
 
                 # Console output with colors
