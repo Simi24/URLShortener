@@ -34,12 +34,34 @@ class CommunicationController{
 
     public async retriveUrl(shortCode: string): Promise<any>{
         try {
-            const response = await this.axiosInstance.get(`/${shortCode}`);
+            const response = await this.axiosInstance.get(`/api/url/${shortCode}`);
             return response.data;
         } catch (err) {
             throw new Error('Error retriving URL. Please try again.');
         }
     }
+
+    public async getStats(shortCode: string): Promise<any>{
+        try {
+            const response = await this.axiosInstance.get(`/api/stats/${shortCode}`);
+            return response.data;
+        } catch (err) {
+            throw new Error('Error getting stats. Please try again.');
+        }
+    }
+
+    public async redirectUrl(shortCode: string): Promise<string> {
+        try {
+            const response = await this.axiosInstance.get(`/r/${shortCode}`, {
+                maxRedirects: 0,
+                validateStatus: (status) => status === 302 || status === 200
+            });
+            return response.headers.location || response.data.url;
+        } catch (err) {
+            throw new Error('Error redirecting URL. Please try again.');
+        }
+    }
+
 }
 
 export default CommunicationController;

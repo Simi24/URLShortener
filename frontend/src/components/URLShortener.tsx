@@ -74,10 +74,16 @@ const URLShortener: React.FC = () => {
 
   return (
     <div className="w-full max-w-xl mx-auto shadow-lg rounded-lg p-6 bg-white dark:bg-slate-800">
-      <h1 className="text-2xl font-semibold text-center text-gray-900 dark:text-white mb-6">
-        URL Shortener
-      </h1>
-      
+      <div className="flex items-center justify-between">
+        <h1 className="text-4xl font-semibold text-center text-gray-900 dark:text-white mb-6">
+          URL Shortener
+        </h1>
+          <img 
+            src="/ADK_Logo.jpg" 
+            alt="ADK Logo" 
+            className="w-32 h-auto mb-8 rounded-full shadow-lg"
+          />
+      </div>
       <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
       
       <div className="mt-6">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { URLData } from '@/util/types/URLData';
+import { useToast } from '@/hooks/use-toast';
 import { Copy, ExternalLink } from 'lucide-react';
 
 interface URLResultProps {
@@ -9,13 +10,21 @@ interface URLResultProps {
 }
 
 export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => {
-  const handleCopyUrl = (textToCopy: string) => {
-    navigator.clipboard.writeText(textToCopy);
-  };
+  const { toast } = useToast();
 
+  const handleCopyUrl = (textToCopy: string) => {
+    console.log('copying', textToCopy);
+    navigator.clipboard.writeText(textToCopy);
+    toast({
+      duration: 2000,
+      title: "Copied!",
+      className: "bg-foreground text-background border-border dark:bg-background dark:text-white"
+    });
+  };
   const shortUrl = baseUrl + data.short_code;
   const displayUrl = mode === 'shorten' ? shortUrl : data.original_url;
-  
+  const redirectUrl = `http://localhost:8000/r/${data.short_code}`;
+
   return (
     <div className="w-full mt-6 bg-white dark:bg-slate-800 p-6 rounded-lg space-y-4">
       <div className="flex items-center justify-between p-4 rounded-lg">
@@ -36,16 +45,26 @@ export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => 
             <Copy className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </button>
           {mode === 'retrieve' ? (
-          <a
-            href={displayUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
-            title="Open URL"
-          >
-            <ExternalLink className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-          </a>
-          ) : null}
+            <a
+              href={displayUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
+              title="Open URL"
+            >
+              <ExternalLink className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </a>
+          ) : (
+            <a
+              href={redirectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
+              title="Open URL"
+            >
+              <ExternalLink className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+            </a>
+          )}
         </div>
       </div>
       <div className="text-sm text-gray-600 dark:text-gray-300">
