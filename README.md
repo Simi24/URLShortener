@@ -66,7 +66,7 @@ This will start all services:
 │ │ ├── models.py # Data models
 │ │ ├── database.py # Database connections
 │ │ └── utils/
-│ │ └── logger.py # Logging system
+│ │     └── logger.py # Logging system
 ├── frontend/
 │ ├── src/
 │ │ ├── components/ # React components
