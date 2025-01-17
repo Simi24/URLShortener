@@ -85,7 +85,6 @@ async def redirect_url(short_code: str):
 
 @app.get("/api/url/{short_code}")
 async def get_original_url(short_code: str):
-    """Endpoint per ottenere solo l'URL lungo"""
     url_doc = await Database.db.urls.find_one({"short_code": short_code})
 
     if not url_doc:
