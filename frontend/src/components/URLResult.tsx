@@ -2,6 +2,7 @@ import React from 'react';
 import { URLData } from '@/util/types/URLData';
 import { useToast } from '@/hooks/use-toast';
 import { Copy, ExternalLink } from 'lucide-react';
+import { useState } from 'react';
 
 interface URLResultProps {
   data: URLData;
@@ -10,7 +11,11 @@ interface URLResultProps {
 }
 
 export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => {
+  const [visits, setVisits] = useState(data.visits);
   const { toast } = useToast();
+  const shortUrl = baseUrl + data.short_code;
+  const displayUrl = mode === 'shorten' ? shortUrl : data.original_url;
+  const redirectUrl = `http://localhost:8000/${data.short_code}`;
 
   const handleCopyUrl = (textToCopy: string) => {
     console.log('copying', textToCopy);
@@ -21,9 +26,11 @@ export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => 
       className: "bg-foreground text-background border-border dark:bg-background dark:text-white"
     });
   };
-  const shortUrl = baseUrl + data.short_code;
-  const displayUrl = mode === 'shorten' ? shortUrl : data.original_url;
-  const redirectUrl = `http://localhost:8000/${data.short_code}`;
+
+  const handleRedirect = () => {
+    window.open(redirectUrl, '_blank');
+    setVisits(visits + 1);
+  };
 
   return (
     <div className="w-full mt-6 bg-white dark:bg-slate-800 p-6 rounded-lg space-y-4">
@@ -56,7 +63,7 @@ export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => 
             </a>
           ) : (
             <a
-              href={redirectUrl}
+              onClick={handleRedirect}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
@@ -68,7 +75,7 @@ export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => 
         </div>
       </div>
       <div className="text-sm text-gray-600 dark:text-gray-300">
-        Visits: <span className="font-medium">{data.visits}</span>
+        Visits Short Link: <span className="font-medium">{visits}</span>
       </div>
     </div>
   );
