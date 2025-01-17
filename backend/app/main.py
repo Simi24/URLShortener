@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+import asyncio
 from .models import URLSchema, URLResponse
 from .database import Database
 from nanoid import generate
@@ -103,6 +104,16 @@ async def redirect_url(short_code: str):
         cached_url = await RedisCache.get_url(short_code)
         if cached_url:
             logger.debug(f"Cache hit for {short_code}")
+
+            # Create a coroutine to update the visit count in the background
+            async def update_visits():
+                try:
+                    await Database.db.urls.update_one({"short_code": short_code}, {"$inc": {"visits": 1}})
+                except Exception as e:
+                    logger.error(f"Error updating visit count: {str(e)}")
+
+            # Launch the background task
+            asyncio.create_task(update_visits())
             process_time = (datetime.now() - start_time).total_seconds()
             logger.success(f"Redirect served from cache (took {process_time:.2f}s)")
             return RedirectResponse(url=cached_url)
