@@ -23,6 +23,7 @@ A modern, full-stack URL shortener application built with FastAPI, React, and Mo
 - Nginx (load balancer)
 
 ### Frontend
+- Vite
 - React
 - TypeScript -> choosen for type safety
 - Tailwind CSS
@@ -66,7 +67,7 @@ This will start all services:
 │ │ ├── models.py # Data models
 │ │ ├── database.py # Database connections
 │ │ └── utils/
-│ │ └── logger.py # Logging system
+│ │     └── logger.py # Logging system
 ├── frontend/
 │ ├── src/
 │ │ ├── components/ # React components
