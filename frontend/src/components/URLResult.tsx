@@ -23,7 +23,7 @@ export const URLResult: React.FC<URLResultProps> = ({ data, mode, baseUrl }) => 
   };
   const shortUrl = baseUrl + data.short_code;
   const displayUrl = mode === 'shorten' ? shortUrl : data.original_url;
-  const redirectUrl = `http://localhost:8000/r/${data.short_code}`;
+  const redirectUrl = `http://localhost:8000/${data.short_code}`;
 
   return (
     <div className="w-full mt-6 bg-white dark:bg-slate-800 p-6 rounded-lg space-y-4">

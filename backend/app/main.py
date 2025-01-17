@@ -93,7 +93,7 @@ async def create_short_url(url: URLSchema):
     raise HTTPException(status_code=500, detail=f"Failed to generate unique short code after {max_attempts} attempts")
 
 
-@app.get("/r/{short_code}")
+@app.get("/{short_code}")
 async def redirect_url(short_code: str):
     start_time = datetime.now()
     logger.info(f"Redirect request received for code: {short_code}")

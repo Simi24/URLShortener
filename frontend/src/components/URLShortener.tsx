@@ -16,7 +16,7 @@ const URLShortener: React.FC = () => {
   
   const { loading, shortenUrl, retrieveUrl } = useNetworkRequest();
 
-  const BASE_URL = 'http://shorturl.com/';
+  const BASE_URL = 'http://localhost:8000/';
 
   const handleShortenSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

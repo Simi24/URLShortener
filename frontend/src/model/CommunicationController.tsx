@@ -52,7 +52,7 @@ class CommunicationController{
 
     public async redirectUrl(shortCode: string): Promise<string> {
         try {
-            const response = await this.axiosInstance.get(`/r/${shortCode}`, {
+            const response = await this.axiosInstance.get(`/${shortCode}`, {
                 maxRedirects: 0,
                 validateStatus: (status) => status === 302 || status === 200
             });
