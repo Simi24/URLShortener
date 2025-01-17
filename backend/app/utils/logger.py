@@ -6,6 +6,7 @@ from pathlib import Path
 import asyncio
 import aiofiles
 from asyncio import Queue
+from os import getenv
 
 
 class LogLevel(Enum):
@@ -33,10 +34,12 @@ class Logger:
         self.task = asyncio.create_task(self._process_logs())
 
     def _setup_log_file(self):
-        log_dir = Path("logs")
+        log_dir = Path(getenv("LOG_PATH", "/app/logs"))
         log_dir.mkdir(exist_ok=True)
+
         timestamp = datetime.now().strftime("%Y%m%d")
         self.log_file = log_dir / f"url_shortener_{timestamp}.log"
+        print(f"Log file path: {self.log_file.absolute()}")
 
     async def _process_logs(self):
         while self.running:

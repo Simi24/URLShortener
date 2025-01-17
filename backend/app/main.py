@@ -20,9 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# TODO: try handling the potential errors that might occur when connecting to the database
-# TODO: try handling the potential errors due to wrong data given by the user, for instance no data given or wrong data type
-
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -136,10 +133,14 @@ async def redirect_url(short_code: str):
 async def get_original_url(short_code: str):
     logger.info(f"Original URL requested for short code: {short_code}")
 
-    url_doc = await Database.db.urls.find_one({"short_code": short_code})
+    try:
+        url_doc = await Database.db.urls.find_one({"short_code": short_code})
+    except Exception as e:
+        logger.error(f"Db error retrieving URL for {short_code}: {str(e)}")
+        return HTTPException(status_code=500, detail="Internal server error")
 
     if not url_doc:
-        logger.warning(f"URL not found for short code: {short_code}")
+        logger.debug(f"URL not found for short code: {short_code}")
         raise HTTPException(status_code=404, detail="URL not found")
 
     logger.success(f"Original URL retrieved for {short_code}")
